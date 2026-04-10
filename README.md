@@ -1,2 +1,3 @@
-# Emotion-Aware-Chatbot
-Emotion-Aware Chatbot that detects user sentiment from text using NLP techniques and responds with context-aware replies. Built with Python, it applies preprocessing, feature extraction, and machine learning models to classify emotions and improve interaction quality, aiming to create more human-like and adaptive conversational experiences. For use
+# MindMate
+
+MindMate is an emotion-aware student companion chatbot that uses Natural Language Processing (NLP) and machine learning to detect user emotions from text and provide personalized responses. It is designed to support both mental well-being and academic productivity by offering motivation, stress-relief suggestions, and study guidance based on the user’s emotional state. Built using Python and a Naive Bayes classifier, MindMate analyzes input, classifies emotions such as happiness, sadness, or stress, and responds with context-aware solutions, creating a more supportive and intelligent conversational experience.
