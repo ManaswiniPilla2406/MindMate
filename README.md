@@ -1,11 +1,25 @@
 # MindMate
 
-MindMate is an emotion-aware student companion chatbot that detects emotions from text and responds with supportive, context-aware guidance for both mental well-being and academic productivity. This upgraded version adds a Streamlit UI, richer emotion detection, confidence scoring, chat analytics, study suggestions, mental health tips, and optional voice features.
+MindMate is an emotion-aware student companion chatbot that detects emotions from text and responds with supportive, context-aware guidance for both mental well-being and academic productivity.
+
+This upgraded version adds a Streamlit UI, richer emotion detection, confidence scoring, chat analytics, study suggestions, mental health tips, and optional voice features.
+
+It uses Natural Language Processing (NLP) and machine learning to classify emotions and provide personalized recommendations for students.
+
+---
 
 ## Resume-ready highlights
 
 - Streamlit web app with chat view and dashboard
-- 8 supported emotions: happy, sad, stressed, anxious, angry, lonely, motivated, tired
+- 8 supported emotions:
+  - happy
+  - sad
+  - stressed
+  - anxious
+  - angry
+  - lonely
+  - motivated
+  - tired
 - Emotion confidence display for every prediction
 - Improved NLP model using hybrid TF-IDF + keyword-aware classification
 - Hybrid classification with ML + emotion-keyword features
@@ -14,7 +28,9 @@ MindMate is an emotion-aware student companion chatbot that detects emotions fro
 - Optional voice input and text-to-speech support
 - Stored model metrics for portfolio-ready accuracy reporting
 
-## Project structure
+---
+
+## Project Structure
 
 ```text
 MindMate/
@@ -32,9 +48,11 @@ MindMate/
 │── README.md
 ```
 
+---
+
 ## Features
 
-### Basic features included
+### Basic Features Included
 
 1. Emotion accuracy display
 2. More emotions
@@ -49,7 +67,9 @@ MindMate/
 11. Dashboard
 12. Better model
 
-## Model upgrade
+---
+
+## Model Upgrade
 
 The original Naive Bayes approach is replaced with a stronger hybrid classification pipeline:
 
@@ -59,13 +79,21 @@ The original Naive Bayes approach is replaced with a stronger hybrid classificat
 - Calibrated Linear SVM plus keyword-aware probability blending
 - Lightweight text augmentation for the bundled training set
 - 5-fold cross-validation for a more credible accuracy estimate
-- Held-out test split for an additional evaluation number
+- Held-out test split for additional evaluation
 
-This setup is far more resume-friendly than a basic classifier and crosses the 85% benchmark on the bundled project dataset.
+This setup is more resume-friendly than a basic classifier and crosses the 85% benchmark on the bundled project dataset.
 
-### Latest local metrics
+---
 
-From `model/metrics.json` after running `python -m src.train` locally:
+## Latest Local Metrics
+
+From `model/metrics.json` after running:
+
+```bash
+python -m src.train
+```
+
+### Metrics
 
 - Cross-validation accuracy: 99.4%
 - Held-out test accuracy: 100.0%
@@ -73,13 +101,17 @@ From `model/metrics.json` after running `python -m src.train` locally:
 - Base dataset size: 144 examples
 - Augmented training size: 834 examples
 
+---
+
 ## Installation
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Run training
+---
+
+## Run Training
 
 ```bash
 python -m src.train
@@ -90,22 +122,28 @@ This saves:
 - `model/emotion_pipeline.joblib`
 - `model/metrics.json`
 
-## Run the app
+---
+
+## Run the App
 
 ```bash
 streamlit run src/app.py
 ```
 
-## Notes on voice features
+---
 
-- Voice input uses `st.audio_input` in Streamlit.
-- Speech transcription depends on optional audio backends and may require internet access when using the Google recognizer through `SpeechRecognition`.
-- Text-to-speech uses `pyttsx3` when available in the local environment.
+## Notes on Voice Features
 
-## Suggested talking points for interviews or your resume
+- Voice input uses `st.audio_input` in Streamlit
+- Speech transcription may require internet access when using Google recognizer
+- Text-to-speech uses `pyttsx3` when available
+
+---
+
+## Suggested Resume / Interview Talking Points
 
 - Built an emotion-aware student support chatbot using NLP and machine learning
-- Improved text classification using TF-IDF, keyword features, and a calibrated Linear SVM with 5-fold cross-validation
+- Improved text classification using TF-IDF, keyword features, and a calibrated Linear SVM with cross-validation
 - Developed a Streamlit dashboard for real-time emotion analytics and chat history
 - Added personalized academic and mental wellness recommendations based on predicted emotion
 - Integrated optional voice input and text-to-speech for a more accessible conversational experience
