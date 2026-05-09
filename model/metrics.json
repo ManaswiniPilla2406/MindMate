@@ -1,0 +1,17 @@
+{
+  "cross_validation_accuracy": 99.28,
+  "test_accuracy": 100.0,
+  "dataset_size": 834,
+  "base_dataset_size": 144,
+  "class_report_macro_f1": 99.28,
+  "labels": [
+    "angry",
+    "anxious",
+    "happy",
+    "lonely",
+    "motivated",
+    "sad",
+    "stressed",
+    "tired"
+  ]
+}
