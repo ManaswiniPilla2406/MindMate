@@ -4,91 +4,138 @@ import sys
 from pathlib import Path
 import streamlit as st
 
-# Path configuration
+# ---------------- PATH CONFIG ----------------
 ROOT_DIR = Path(__file__).resolve().parents[1]
+
 if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
 
 from src.chatbot import EmotionAwareCompanion
 
-# ---------------- UI CONFIG ----------------
+# ---------------- PAGE CONFIG ----------------
 st.set_page_config(
     page_title="MindMate",
     page_icon="🌿",
     layout="centered"
 )
 
-# ---------------- THEME (Refined Cream + Sage Green) ----------------
+# ---------------- CUSTOM CSS ----------------
 st.markdown("""
 <style>
-    /* Background and global font */
+
+    /* Entire App */
     .stApp {
         background-color: #f8f7f2;
         color: #3e4a3e;
+        font-family: 'Segoe UI', sans-serif;
     }
 
-    /* Header Styling */
+    /* Remove dark Streamlit top spacing */
+    .block-container {
+        padding-top: 2rem;
+    }
+
+    /* Header */
     .main-header {
         text-align: center;
-        padding: 20px 0;
+        margin-top: 20px;
     }
+
     .main-header h1 {
-        font-size: 3rem;
-        color: #2c3e2c;
-        margin-bottom: 0;
-    }
-    .main-header span {
+        font-size: 3.2rem;
         color: #7fb77e;
+        margin-bottom: 10px;
+        font-weight: 700;
     }
+
+    .main-header span {
+        color: #5f7a5f;
+    }
+
     .sub-header {
         text-align: center;
         color: #6b7a6b;
         font-size: 1.1rem;
-        margin-bottom: 40px;
+        margin-bottom: 35px;
     }
 
-    /* Chat Container Simulation */
-    .chat-container {
-        background-color: #f1f3ee;
-        border-radius: 20px;
-        padding: 20px;
-        border: 1px solid #e0e4d9;
-        margin-bottom: 20px;
-    }
-
-    /* Chat Bubbles */
+    /* Bot Bubble */
     .bot-bubble {
-        background-color: contrast-color: #3e4a3e;
-        padding: 15px;
-        border-radius: 15px 15px 15px 0px;
-        margin-bottom: 10px;
-        max-width: 85%;
-        border: 1px solid #ccd5c9;
+        background-color: #ffffff;
+        color: #3e4a3e;
+        padding: 18px;
+        border-radius: 18px 18px 18px 5px;
+        margin-bottom: 12px;
+        border: 1px solid #d7dfd3;
+        box-shadow: 0px 2px 8px rgba(0,0,0,0.03);
     }
+
+    /* User Bubble */
     .user-bubble {
-        background-color: #5f7a5f;
+        background-color: #7fb77e;
         color: white;
         padding: 15px;
-        border-radius: 15px 15px 0px 15px;
+        border-radius: 18px 18px 5px 18px;
         margin-left: auto;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
+        width: fit-content;
         max-width: 80%;
-        text-align: left;
     }
 
-    /* Small labels inside bubbles */
+    /* Emotion Label */
     .emotion-label {
-        font-weight: bold;
-        font-size: 0.8rem;
-        margin-bottom: 5px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #5f7a5f;
+        margin-bottom: 6px;
         display: block;
     }
 
-    /* Input Styling */
-    div[data-baseweb="input"] {
-        border-radius: 25px !important;
-        background-color: white !important;
+    /* Suggestion Buttons */
+    div.stButton > button {
+        background-color: #f2eadf !important;
+        color: #5f7a5f !important;
+        border: 1px solid #d9d1c7 !important;
+        border-radius: 20px !important;
+        padding: 10px 16px !important;
+        font-weight: 500 !important;
+        transition: 0.3s ease;
     }
+
+    div.stButton > button:hover {
+        background-color: #e8dfd2 !important;
+        color: #3e4a3e !important;
+        border: 1px solid #c8beb0 !important;
+    }
+
+    /* Input Box */
+    .stChatInputContainer {
+        background-color: transparent !important;
+        border-top: none !important;
+    }
+
+    .stChatInputContainer > div {
+        background-color: #f2eadf !important;
+        border: 1px solid #ddd4c8 !important;
+        border-radius: 18px !important;
+    }
+
+    textarea {
+        color: #3e4a3e !important;
+    }
+
+    textarea::placeholder {
+        color: #7a8477 !important;
+    }
+
+    /* Footer */
+    .footer {
+        text-align: center;
+        color: #8c9489;
+        margin-top: 30px;
+        font-size: 0.9rem;
+    }
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -99,63 +146,126 @@ def get_bot():
 
 bot = get_bot()
 
-# ---------------- SESSION ----------------
+# ---------------- SESSION STATE ----------------
 if "messages" not in st.session_state:
     st.session_state.messages = [
-        {"role": "bot", "content": "Hi, I'm MindMate 🌿 — your emotion-aware study companion. Tell me how you're feeling or what's on your mind, and I'll meet you where you are.", "emotion": "neutral"}
+        {
+            "role": "bot",
+            "content": (
+                "Hi, I'm MindMate 🌿 — your emotion-aware study companion. "
+                "Tell me how you're feeling or what's on your mind, "
+                "and I'll meet you where you are."
+            ),
+            "emotion": "neutral"
+        }
     ]
 
+# To handle suggestion clicks
+if "prefill" not in st.session_state:
+    st.session_state.prefill = ""
+
 # ---------------- HEADER ----------------
-st.markdown('<div class="main-header"><h1>Hey, how are you <span>really</span> feeling?</h1></div>', unsafe_allow_html=True)
-st.markdown('<div class="sub-header">MindMate listens, senses your emotions, and gently supports your studies and wellbeing.</div>', unsafe_allow_html=True)
+st.markdown("""
+<div class="main-header">
+    <h1>Hey, how are you <span>really</span> feeling?</h1>
+</div>
+""", unsafe_allow_html=True)
+
+st.markdown("""
+<div class="sub-header">
+MindMate listens, senses your emotions, and gently supports your studies and wellbeing.
+</div>
+""", unsafe_allow_html=True)
 
 # ---------------- CHAT DISPLAY ----------------
 for msg in st.session_state.messages:
-    if msg["role"] == "bot":
-        emotion_html = f"<span class='emotion-label'>Emotion: {msg.get('emotion', 'analyzing...')}</span>" if "emotion" in msg else ""
-        content = msg["content"].replace("\n", "<br>")
-        st.markdown(f"""
-            <div class="bot-bubble">
-                {emotion_html}
-                {content}
-            </div>
-        """, unsafe_allow_html=True)
-    else:
-        st.markdown(f'<div class="user-bubble">{msg["content"]}</div>', unsafe_allow_html=True)
 
-# ---------------- QUICK REPLIES (Suggestion Pills) ----------------
+    if msg["role"] == "bot":
+
+        emotion_html = (
+            f"<span class='emotion-label'>Emotion: {msg.get('emotion', 'neutral')}</span>"
+        )
+
+        content = msg["content"].replace("\n", "<br>")
+
+        st.markdown(f"""
+        <div class="bot-bubble">
+            {emotion_html}
+            {content}
+        </div>
+        """, unsafe_allow_html=True)
+
+    else:
+
+        st.markdown(f"""
+        <div class="user-bubble">
+            {msg["content"]}
+        </div>
+        """, unsafe_allow_html=True)
+
+# ---------------- SUGGESTIONS ----------------
 if len(st.session_state.messages) == 1:
+
     st.write("🪄 Try one of these")
-    cols = st.columns([1, 1, 1])
-    suggestions = ["I'm stressed about exams", "I can't focus today", "I aced my test!"]
-    
+
+    suggestions = [
+        "I'm stressed about exams",
+        "I can't focus today",
+        "I aced my test!"
+    ]
+
+    cols = st.columns(3)
+
     for i, suggestion in enumerate(suggestions):
-        if cols[i % 3].button(suggestion, key=f"sug_{i}"):
-            user_input = suggestion # Handled below
+
+        if cols[i].button(suggestion):
+
+            st.session_state.prefill = suggestion
 
 # ---------------- CHAT INPUT ----------------
-with st.container():
-    query = st.chat_input("Tell MindMate what's on your mind...")
-    
-    if query:
-        # Add user message
-        st.session_state.messages.append({"role": "user", "content": query})
-        
-        # Analyze
-        result = bot.analyze(query)
-        
-        # Build composite response
-        full_response = f"{result.response}\n\n**Try this:**\n{result.wellness_tip}\n{result.study_tip}"
-        
-        # Add bot message
-        st.session_state.messages.append({
-            "role": "bot", 
-            "content": full_response, 
-            "emotion": result.emotion
-        })
-        
-        st.rerun()
+query = st.chat_input(
+    "Tell MindMate what's on your mind...",
+    key="chat_input"
+)
 
-# Footer
-st.markdown("---")
-st.caption("<center>MindMate offers supportive guidance — not a substitute for professional care.</center>", unsafe_allow_html=True)
+# Autofill suggestion into input
+if st.session_state.prefill and not query:
+    query = st.session_state.prefill
+    st.session_state.prefill = ""
+
+# ---------------- PROCESS INPUT ----------------
+if query:
+
+    # User message
+    st.session_state.messages.append({
+        "role": "user",
+        "content": query
+    })
+
+    # Bot analysis
+    result = bot.analyze(query)
+
+    # Full response
+    full_response = (
+        f"{result.response}\n\n"
+        f"🌿 Try this:\n"
+        f"{result.wellness_tip}\n\n"
+        f"📚 Study Tip:\n"
+        f"{result.study_tip}"
+    )
+
+    # Bot message
+    st.session_state.messages.append({
+        "role": "bot",
+        "content": full_response,
+        "emotion": result.emotion
+    })
+
+    st.rerun()
+
+# ---------------- FOOTER ----------------
+st.markdown("""
+<div class="footer">
+MindMate offers supportive guidance — not a substitute for professional care.
+</div>
+""", unsafe_allow_html=True)
