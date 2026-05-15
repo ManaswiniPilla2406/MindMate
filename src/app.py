@@ -12,6 +12,13 @@ if str(ROOT_DIR) not in sys.path:
 
 from src.chatbot import EmotionAwareCompanion
 
+# ---------------- LOGIN CHECK ----------------
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
+
+if not st.session_state.logged_in:
+    st.switch_page("pages/login.py")
+
 # ---------------- PAGE CONFIG ----------------
 st.set_page_config(
     page_title="MindMate",
@@ -136,6 +143,113 @@ st.markdown("""
         font-size: 0.9rem;
     }
 
+# ---------------- STYLING ----------------
+st.markdown("""
+<style>
+
+/* Hide Sidebar */
+[data-testid="stSidebar"] {
+    display: none;
+}
+
+/* Hide Sidebar Navigation */
+section[data-testid="stSidebarNav"] {
+    display: none;
+}
+
+/* Hide Header */
+[data-testid="stHeader"] {
+    display: none;
+}
+
+/* App Background */
+.stApp {
+    background-color: #f8f7f2;
+    color: #3e4a3e;
+}
+
+/* Header */
+.main-header {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.main-header h1 {
+    font-size: 3rem;
+    color: #2c3e2c;
+    margin-bottom: 0;
+}
+
+.main-header span {
+    color: #7fb77e;
+}
+
+/* Subtitle */
+.sub-header {
+    text-align: center;
+    color: #6b7a6b;
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+}
+
+/* Welcome */
+.welcome-user {
+    text-align: center;
+    font-size: 1rem;
+    color: #5f6f5f;
+    margin-bottom: 10px;
+}
+
+/* Bot Bubble */
+.bot-bubble {
+    background-color: #eef2ea;
+    padding: 15px;
+    border-radius: 15px 15px 15px 0px;
+    margin-bottom: 12px;
+    max-width: 85%;
+    border: 1px solid #d9e2d2;
+}
+
+/* User Bubble */
+.user-bubble {
+    background-color: #5f7a5f;
+    color: white;
+    padding: 15px;
+    border-radius: 15px 15px 0px 15px;
+    margin-left: auto;
+    margin-bottom: 12px;
+    max-width: 80%;
+}
+
+/* Emotion Label */
+.emotion-label {
+    font-weight: bold;
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+    display: block;
+    color: #4d5d4d;
+}
+
+/* Input Box */
+div[data-baseweb="input"] {
+    border-radius: 25px !important;
+    background-color: white !important;
+}
+
+/* Buttons */
+.stButton > button {
+    border-radius: 12px;
+    background-color: #7fb77e;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+}
+
+.stButton > button:hover {
+    background-color: #6ca56b;
+    color: white;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -152,9 +266,14 @@ if "messages" not in st.session_state:
         {
             "role": "bot",
             "content": (
+
                 "Hi, I'm MindMate 🌿 — your emotion-aware study companion. "
                 "Tell me how you're feeling or what's on your mind, "
                 "and I'll meet you where you are."
+                "Hi, I'm MindMate 🌿 — your emotion-aware study companion.\n\n"
+                "Tell me how you're feeling or what's on your mind, "
+                "and I'll support you."
+
             ),
             "emotion": "neutral"
         }
@@ -204,15 +323,82 @@ for msg in st.session_state.messages:
         """, unsafe_allow_html=True)
 
 # ---------------- SUGGESTIONS ----------------
+=======
+col1, col2 = st.columns([8, 1])
+
+with col1:
+    st.markdown(
+        '<div class="main-header"><h1>Hey, how are you <span>really</span> feeling?</h1></div>',
+        unsafe_allow_html=True
+    )
+
+with col2:
+    if st.button("Logout"):
+
+        # Clear session
+        st.session_state.clear()
+
+        # Redirect to login
+        st.switch_page("pages/login.py")
+
+# ---------------- WELCOME USER ----------------
+username = st.session_state.get("username", "User")
+
+st.markdown(
+    f'<div class="welcome-user">Welcome back, <b>{username}</b> 👋</div>',
+    unsafe_allow_html=True
+)
+
+st.markdown(
+    '<div class="sub-header">MindMate listens, senses your emotions, and gently supports your studies and wellbeing.</div>',
+    unsafe_allow_html=True
+)
+
+# ---------------- CHAT DISPLAY ----------------
+for msg in st.session_state.messages:
+
+    if msg["role"] == "bot":
+
+        emotion_html = (
+            f"<span class='emotion-label'>Emotion: {msg.get('emotion', 'neutral')}</span>"
+        )
+
+        content = msg["content"].replace("\n", "<br>")
+
+        st.markdown(
+            f"""
+            <div class="bot-bubble">
+                {emotion_html}
+                {content}
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+    else:
+        st.markdown(
+            f"""
+            <div class="user-bubble">
+                {msg["content"]}
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+# ---------------- QUICK REPLIES ----------------
+>>>>>>> e4799e2 (Added login and signup authentication to MindMate)
 if len(st.session_state.messages) == 1:
 
     st.write("🪄 Try one of these")
+
+    cols = st.columns(3)
 
     suggestions = [
         "I'm stressed about exams",
         "I can't focus today",
         "I aced my test!"
     ]
+
 
     cols = st.columns(3)
 
@@ -237,10 +423,44 @@ if st.session_state.prefill and not query:
 if query:
 
     # User message
+    for i, suggestion in enumerate(suggestions):
+
+        if cols[i].button(suggestion, key=f"suggestion_{i}"):
+
+            st.session_state.messages.append({
+                "role": "user",
+                "content": suggestion
+            })
+
+            result = bot.analyze(suggestion)
+
+            full_response = (
+                f"{result.response}\n\n"
+                f"**Try this:**\n"
+                f"{result.wellness_tip}\n"
+                f"{result.study_tip}"
+            )
+
+            st.session_state.messages.append({
+                "role": "bot",
+                "content": full_response,
+                "emotion": result.emotion
+            })
+
+            st.rerun()
+
+# ---------------- CHAT INPUT ----------------
+query = st.chat_input("Tell MindMate what's on your mind...")
+
+if query:
+
+    # Add User Message
+
     st.session_state.messages.append({
         "role": "user",
         "content": query
     })
+
 
     # Bot analysis
     result = bot.analyze(query)
@@ -255,6 +475,20 @@ if query:
     )
 
     # Bot message
+
+    # Analyze Emotion
+    result = bot.analyze(query)
+
+    # Final Response
+    full_response = (
+        f"{result.response}\n\n"
+        f"**Try this:**\n"
+        f"{result.wellness_tip}\n"
+        f"{result.study_tip}"
+    )
+
+    # Add Bot Message
+
     st.session_state.messages.append({
         "role": "bot",
         "content": full_response,
@@ -264,8 +498,15 @@ if query:
     st.rerun()
 
 # ---------------- FOOTER ----------------
+
 st.markdown("""
 <div class="footer">
 MindMate offers supportive guidance — not a substitute for professional care.
 </div>
 """, unsafe_allow_html=True)
+
+st.markdown("---")
+
+st.caption(
+    "MindMate offers supportive guidance — not a substitute for professional care."
+)
