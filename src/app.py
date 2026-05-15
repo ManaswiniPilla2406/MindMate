@@ -27,7 +27,7 @@ st.set_page_config(
 )
 
 # ---------------- CUSTOM CSS ----------------
-st.markdown("""
+CSS_STYLES = """
 <style>
 
 /* Hide Sidebar */
@@ -167,7 +167,8 @@ button[kind="secondary"] {
 }
 
 </style>
-""", unsafe_allow_html=True)
+"""
+st.markdown(CSS_STYLES, unsafe_allow_html=True)
 
 # ---------------- MODEL ----------------
 @st.cache_resource
