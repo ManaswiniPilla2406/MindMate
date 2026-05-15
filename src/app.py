@@ -45,14 +45,14 @@ section[data-testid="stSidebarNav"] {
     display: none;
 }
 
-/* Entire App */
+/* App */
 .stApp {
     background-color: #f8f7f2;
     color: #3e4a3e;
     font-family: 'Segoe UI', sans-serif;
 }
 
-/* Main Container */
+/* Main container */
 .block-container {
     padding-top: 2rem;
 }
@@ -74,7 +74,7 @@ section[data-testid="stSidebarNav"] {
     color: #5f7a5f;
 }
 
-/* Subtitle */
+/* Sub header */
 .sub-header {
     text-align: center;
     color: #6b7a6b;
@@ -89,7 +89,7 @@ section[data-testid="stSidebarNav"] {
     margin-bottom: 10px;
 }
 
-/* Bot Bubble */
+/* Bot bubble */
 .bot-bubble {
     background-color: #ffffff;
     color: #3e4a3e;
@@ -100,7 +100,7 @@ section[data-testid="stSidebarNav"] {
     box-shadow: 0px 2px 8px rgba(0,0,0,0.03);
 }
 
-/* User Bubble */
+/* User bubble */
 .user-bubble {
     background-color: #7fb77e;
     color: white;
@@ -112,7 +112,7 @@ section[data-testid="stSidebarNav"] {
     max-width: 80%;
 }
 
-/* Emotion Label */
+/* Emotion label */
 .emotion-label {
     font-size: 0.85rem;
     font-weight: 600;
@@ -131,13 +131,22 @@ div.stButton > button {
     font-weight: 500 !important;
 }
 
-/* Logout Button */
-.logout-btn button {
-    background-color: #7fb77e !important;
-    color: white !important;
+/* Logout FIX (IMPORTANT) */
+div[data-testid="column"] {
+    display: flex;
+    align-items: center;
 }
 
-/* Chat Input */
+/* Force logout button single line */
+button[kind="secondary"] {
+    white-space: nowrap !important;
+    min-width: 90px !important;
+    padding: 8px 14px !important;
+    border-radius: 20px !important;
+    text-align: center !important;
+}
+
+/* Chat input */
 .stChatInputContainer {
     background-color: transparent !important;
     border-top: none !important;
@@ -182,7 +191,7 @@ if "messages" not in st.session_state:
     ]
 
 # ---------------- HEADER ----------------
-col1, col2 = st.columns([8, 1])
+col1, col2 = st.columns([9, 1])
 
 with col1:
     st.markdown("""
@@ -192,8 +201,7 @@ with col1:
     """, unsafe_allow_html=True)
 
 with col2:
-    if st.button("Logout"):
-
+    if st.button("Logout", key="logout_btn"):
         st.session_state.clear()
         st.switch_page("pages/login.py")
 
@@ -215,11 +223,7 @@ MindMate listens, senses your emotions, and gently supports your studies and wel
 for msg in st.session_state.messages:
 
     if msg["role"] == "bot":
-
-        emotion_html = (
-            f"<span class='emotion-label'>Emotion: {msg.get('emotion', 'neutral')}</span>"
-        )
-
+        emotion_html = f"<span class='emotion-label'>Emotion: {msg.get('emotion', 'neutral')}</span>"
         content = msg["content"].replace("\n", "<br>")
 
         st.markdown(f"""
@@ -230,7 +234,6 @@ for msg in st.session_state.messages:
         """, unsafe_allow_html=True)
 
     else:
-
         st.markdown(f"""
         <div class="user-bubble">
             {msg["content"]}
