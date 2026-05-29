@@ -148,14 +148,17 @@ button[kind="secondary"] {
 
 /* Chat input */
 .stChatInputContainer {
-    background-color: transparent !important;
+    background-color: #f5f9f5 !important;
     border-top: none !important;
+    padding: 20px !important;
+    margin-top: 10px !important;
 }
 
 .stChatInputContainer > div {
-    background-color: #f2eadf !important;
-    border: 1px solid #ddd4c8 !important;
+    background-color: #ffffff !important;
+    border: 1px solid #e0e8dd !important;
     border-radius: 18px !important;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.04) !important;
 }
 
 /* Footer */
