@@ -326,5 +326,4 @@ def update_task(task_id):
 
 if __name__ == "__main__":
     load_model()
-    # Run server on port 5500 to match the screenshots: 127.0.0.1:5500/index.html
-    app.run(host="127.0.0.1", port=5500, debug=True)
+    app.run(host="0.0.0.0", port=10000)
