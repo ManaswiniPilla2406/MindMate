@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindMate — Your Study Companion</title>
+    <!-- Google Fonts: Lora (serif) and Inter (sans-serif) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom styling -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="app">
+        
+        <!-- ================= VIEW: SIGN IN ================= -->
+        <div id="view-signin" class="view active">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <h1 class="welcome-title">Welcome <span class="logo-leaf"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="leaf-svg">
+                            <path d="M12 2C7.8 2 5 5.1 5 9.2c0 4 2.7 7.2 6.4 10.4.5.4 1.2.4 1.7 0 3.7-3.2 6.4-6.4 6.4-10.4C19 5.1 16.2 2 12 2z"></path>
+                            <path d="M12 2v7.5"></path>
+                            <path d="M12 9.5c-1.5-.8-3.2-1.2-4.8-.8"></path>
+                            <path d="M12 9.5c1.5-.8 3.2-1.2 4.8-.8"></path>
+                            <path d="M12 13.5c-1.2 1-2.4 1.6-4 2"></path>
+                            <path d="M12 13.5c1.2 1 2.4 1.6 4 2"></path>
+                        </svg></span></h1>
+                    <p class="auth-subtitle">Sign in to continue with MindMate</p>
+                </div>
+                
+                <form id="signin-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="signin-email">Email address</label>
+                        <div class="input-container email-input">
+                            <i class="fa-regular fa-envelope input-icon"></i>
+                            <input type="email" id="signin-email" placeholder="Enter your email" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signin-password">Password</label>
+                        <div class="input-container password-input">
+                            <i class="fa-solid fa-lock input-icon"></i>
+                            <input type="password" id="signin-password" placeholder="••••••••••••••••" required>
+                            <i class="fa-regular fa-eye-slash toggle-password" onclick="togglePasswordVisibility('signin-password', this)"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="forgot-password-container">
+                        <a href="#" class="auth-link forgot-pwd">Forgot password?</a>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+                </form>
+                
+                <div class="auth-footer">
+                    <p>Don't have an account? <a href="#" id="link-goto-signup" class="auth-action-link">Create one</a></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ================= VIEW: SIGN UP ================= -->
+        <div id="view-signup" class="view">
+            <div class="auth-card signup-card">
+                <div class="auth-header">
+                    <h1 class="welcome-title serif">Create account</h1>
+                    <p class="auth-subtitle">Start your journey with MindMate today</p>
+                </div>
+                
+                <form id="signup-form" class="auth-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="signup-firstname">First name</label>
+                            <input type="text" id="signup-firstname" placeholder="Aryan" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signup-lastname">Last name</label>
+                            <input type="text" id="signup-lastname" placeholder="Sharma" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signup-email">Email address</label>
+                        <div class="input-container email-input">
+                            <i class="fa-regular fa-envelope input-icon"></i>
+                            <input type="email" id="signup-email" placeholder="you@example.com" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signup-password">Password</label>
+                        <div class="input-container password-input">
+                            <i class="fa-solid fa-lock input-icon"></i>
+                            <input type="password" id="signup-password" placeholder="Min 8 characters" required minlength="8">
+                            <i class="fa-regular fa-eye-slash toggle-password" onclick="togglePasswordVisibility('signup-password', this)"></i>
+                        </div>
+                        <div class="password-strength-meter">
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                        </div>
+                        <div id="signup-password-label" class="password-strength-label">Enter a password</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="signup-confirm-password">Confirm password</label>
+                        <div class="input-container password-input">
+                            <i class="fa-solid fa-lock input-icon"></i>
+                            <input type="password" id="signup-confirm-password" placeholder="Re-enter password" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-block">Create account</button>
+                </form>
+                
+                <div class="auth-footer">
+                    <p>Already have an account? <a href="#" id="link-goto-signin" class="auth-action-link">Sign in</a></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ================= VIEW: DASHBOARD ================= -->
+        <div id="view-dashboard" class="view">
+            <div class="dashboard-container">
+                
+                <!-- SIDEBAR -->
+                <aside class="sidebar">
+                    <div class="sidebar-header">
+                        <span class="logo-icon">
+                            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="sidebar-leaf-svg">
+                                <path d="M12 2C7.8 2 5 5.1 5 9.2c0 4 2.7 7.2 6.4 10.4.5.4 1.2.4 1.7 0 3.7-3.2 6.4-6.4 6.4-10.4C19 5.1 16.2 2 12 2z"></path>
+                                <path d="M12 2v7.5"></path>
+                                <path d="M12 9.5c-1.5-.8-3.2-1.2-4.8-.8"></path>
+                                <path d="M12 9.5c1.5-.8 3.2-1.2 4.8-.8"></path>
+                                <path d="M12 13.5c-1.2 1-2.4 1.6-4 2"></path>
+                                <path d="M12 13.5c1.2 1 2.4 1.6 4 2"></path>
+                            </svg>
+                        </span>
+                        <span class="logo-text">MindMate</span>
+                    </div>
+                    
+                    <button id="btn-new-chat" class="btn btn-new-conv">
+                        <i class="fa-solid fa-pencil icon-left"></i> New conversation
+                    </button>
+                    
+                    <nav class="sidebar-nav">
+                        <a href="#" class="nav-item active" data-tab="tab-chat">
+                            <i class="fa-regular fa-comment-dots nav-icon"></i> Chat
+                        </a>
+                        <a href="#" class="nav-item" data-tab="tab-mood">
+                            <i class="fa-solid fa-chart-line nav-icon"></i> Mood Tracker
+                        </a>
+                        <a href="#" class="nav-item" data-tab="tab-planner">
+                            <i class="fa-regular fa-calendar-check nav-icon"></i> Study Planner
+                        </a>
+                        <a href="#" class="nav-item" data-tab="tab-settings">
+                            <i class="fa-solid fa-gear nav-icon"></i> Settings
+                        </a>
+                    </nav>
+                    
+                    <div class="recent-chats-section">
+                        <span class="section-title">RECENT CHATS</span>
+                        <div id="recent-chats-list" class="recent-list">
+                            <!-- Dynamic recent chat list -->
+                        </div>
+                    </div>
+                    
+                    <div class="sidebar-footer">
+                        <div class="user-profile-card" id="user-profile-menu-trigger">
+                            <div class="user-avatar" id="user-avatar-initial">M</div>
+                            <div class="user-info">
+                                <span class="user-name" id="profile-name">manu</span>
+                                <span class="user-email" id="profile-email">@gmail.com</span>
+                            </div>
+                            <i class="fa-solid fa-chevron-down dropdown-arrow"></i>
+                            
+                            <!-- Profile dropdown menu -->
+                            <div id="profile-dropdown" class="profile-dropdown-menu">
+                                <a href="#" id="btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Sign out</a>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+                
+                <!-- MAIN CONTENT AREA -->
+                <main class="main-content">
+                    
+                    <!-- TAB Pane: CHAT -->
+                    <section id="tab-chat" class="tab-pane active">
+                        <div class="chat-tab-container">
+                            <header class="chat-header">
+                                <h2 class="chat-title-heading">Hey, how are you <span class="accent-feeling">really</span> feeling?</h2>
+                                <div class="chat-header-actions">
+                                    <span id="current-mood-badge" class="mood-badge neutral">
+                                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="badge-leaf-svg">
+                                            <path d="M12 2C7.8 2 5 5.1 5 9.2c0 4 2.7 7.2 6.4 10.4.5.4 1.2.4 1.7 0 3.7-3.2 6.4-6.4 6.4-10.4C19 5.1 16.2 2 12 2z"></path>
+                                            <path d="M12 2v7.5"></path>
+                                            <path d="M12 9.5c-1.5-.8-3.2-1.2-4.8-.8"></path>
+                                            <path d="M12 9.5c1.5-.8 3.2-1.2 4.8-.8"></path>
+                                            <path d="M12 13.5c-1.2 1-2.4 1.6-4 2"></path>
+                                            <path d="M12 13.5c1.2 1 2.4 1.6 4 2"></path>
+                                        </svg>
+                                        <span id="current-mood-text">neutral</span>
+                                    </span>
+                                    <button id="btn-log-mood-header" class="btn btn-secondary">Log mood</button>
+                                </div>
+                            </header>
+                            
+                            <div id="chat-conversation-area" class="chat-conversation-area">
+                                
+                                <!-- WELCOME INITIAL SCREEN -->
+                                <div id="chat-welcome-overlay" class="chat-welcome-overlay">
+                                    <div class="welcome-icon-container">
+                                        <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="center-leaf-svg">
+                                            <path d="M12 2C7.8 2 5 5.1 5 9.2c0 4 2.7 7.2 6.4 10.4.5.4 1.2.4 1.7 0 3.7-3.2 6.4-6.4 6.4-10.4C19 5.1 16.2 2 12 2z"></path>
+                                            <path d="M12 2v7.5"></path>
+                                            <path d="M12 9.5c-1.5-.8-3.2-1.2-4.8-.8"></path>
+                                            <path d="M12 9.5c1.5-.8 3.2-1.2 4.8-.8"></path>
+                                            <path d="M12 13.5c-1.2 1-2.4 1.6-4 2"></path>
+                                            <path d="M12 13.5c1.2 1 2.4 1.6 4 2"></path>
+                                        </svg>
+                                    </div>
+                                    <h3 class="welcome-heading">Hi, I'm MindMate</h3>
+                                    <p class="welcome-paragraph">Your emotion-aware study companion. Tell me how you're feeling or what's on your mind — I'll meet you where you are.</p>
+                                    
+                                    <div class="suggestion-chips-grid">
+                                        <button class="chip-btn" data-text="I'm stressed about exams">
+                                            <span>😓</span> I'm stressed about exams
+                                        </button>
+                                        <button class="chip-btn" data-text="I can't focus today">
+                                            <span>😕</span> I can't focus today
+                                        </button>
+                                        <button class="chip-btn" data-text="I aced my test!">
+                                            <span>😊</span> I aced my test!
+                                        </button>
+                                        <button class="chip-btn" data-text="I feel overwhelmed">
+                                            <span>😩</span> I feel overwhelmed
+                                        </button>
+                                        <button class="chip-btn" data-text="I don't understand this topic">
+                                            <span>😕</span> I don't understand this topic
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Chat history logs render here -->
+                                <div id="chat-messages-list" class="messages-list"></div>
+                                
+                            </div>
+                            
+                            <footer class="chat-input-bar">
+                                <form id="chat-message-form" class="message-form">
+                                    <div class="input-bar-container">
+                                        <input type="text" id="chat-input-field" placeholder="Tell MindMate what's on your mind..." required autocomplete="off">
+                                        <button type="submit" id="btn-send-message" class="btn btn-send">
+                                            <i class="fa-solid fa-chevron-right send-icon"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </footer>
+                        </div>
+                    </section>
+                    
+                    <!-- TAB Pane: MOOD TRACKER -->
+                    <section id="tab-mood" class="tab-pane">
+                        <div class="tab-content-container">
+                            <header class="tab-header-plain">
+                                <h2 class="serif">Mood Tracker</h2>
+                                <p class="tab-subtitle">Reflect on your emotional history and study states</p>
+                            </header>
+                            
+                            <div class="mood-dashboard-grid">
+                                <!-- Manual log module -->
+                                <div class="dashboard-card log-mood-card">
+                                    <h3>Log Your Current Mood</h3>
+                                    <form id="manual-mood-form" class="mood-form">
+                                        <div class="form-group">
+                                            <label for="mood-select">Select Mood</label>
+                                            <select id="mood-select" required>
+                                                <option value="neutral">😌 Neutral</option>
+                                                <option value="happy">😊 Happy / Energized</option>
+                                                <option value="stressed">😓 Stressed / Anxious</option>
+                                                <option value="distracted">😕 Distracted</option>
+                                                <option value="overwhelmed">😫 Overwhelmed</option>
+                                                <option value="anxious">😟 Uncertain / Anxious</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="mood-notes">Notes (What's causing this feeling?)</label>
+                                            <textarea id="mood-notes" rows="3" placeholder="I spent 3 hours studying math today..."></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Save Mood Log</button>
+                                    </form>
+                                </div>
+                                
+                                <!-- Mood Statistics -->
+                                <div class="dashboard-card mood-stats-card">
+                                    <h3>Mood Insights</h3>
+                                    <div class="stats-metric-container">
+                                        <div class="metric-item">
+                                            <span class="metric-value" id="stats-total-logs">0</span>
+                                            <span class="metric-label">Total Logs</span>
+                                        </div>
+                                        <div class="metric-item">
+                                            <span class="metric-value" id="stats-dominant-mood">None</span>
+                                            <span class="metric-label">Dominant Mood</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="dashboard-card history-card">
+                                <h3>Mood History Logs</h3>
+                                <div id="mood-history-list" class="mood-history-list">
+                                    <p class="empty-state-text">No mood logs saved yet. Start chatting or log your mood above!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- TAB Pane: ~ -->
+                    <section id="tab-planner" class="tab-pane">
+                        <div class="tab-content-container">
+                            <header class="tab-header-plain">
+                                <h2 class="serif">Study Planner</h2>
+                                <p class="tab-subtitle">Organize and manage your study topics and tasks</p>
+                            </header>
+                            
+                            <div class="dashboard-card planner-input-card">
+                                <h3>Add a New Task</h3>
+                                <form id="planner-task-form" class="task-form">
+                                    <div class="task-input-container">
+                                        <input type="text" id="task-title-input" placeholder="e.g. Read Chapter 4 of Biology, Practice Integration questions..." required>
+                                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add Task</button>
+                                    </div>
+                                </form>
+                            </div>
+                            
+                            <div class="dashboard-card tasks-card">
+                                <h3>Your Tasks</h3>
+                                <div id="tasks-list" class="tasks-list">
+                                    <p class="empty-state-text">No tasks created yet. Create a task to organize your study session!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- TAB Pane: SETTINGS -->
+                    <section id="tab-settings" class="tab-pane">
+                        <div class="tab-content-container">
+                            <header class="tab-header-plain">
+                                <h2 class="serif">Settings</h2>
+                                <p class="tab-subtitle">Configure your MindMate experience</p>
+                            </header>
+                            
+                            <div class="dashboard-card settings-card">
+                                <h3>User Information</h3>
+                                <div class="settings-info-grid">
+                                    <div class="info-row">
+                                        <span class="info-label">Full Name:</span>
+                                        <span class="info-val" id="settings-user-fullname">Manu Sharma</span>
+                                    </div>
+                                    <div class="info-row">
+                                        <span class="info-label">Email:</span>
+                                        <span class="info-val" id="settings-user-email">@gmail.com</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="dashboard-card settings-card">
+                                <h3>Application Info</h3>
+                                <p><strong>MindMate v1.0.0</strong> - Local Emotion-Aware Student Companion.</p>
+                                <p>Powered by Python (Flask) and Scikit-Learn NLP Pipeline for sentiment and intent analysis.</p>
+                                <button id="btn-clear-data" class="btn btn-danger">Clear All Chat Data</button>
+                            </div>
+                        </div>
+                    </section>
+                    
+                </main>
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- SPA Javascript Logic -->
+    <script src="js/app.js"></script>
+</body>
+</html>
